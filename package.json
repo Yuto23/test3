@@ -8,5 +8,17 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yuto23/test3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Yuto23/test3/issues"
+  },
+  "homepage": "https://github.com/Yuto23/test3#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }
