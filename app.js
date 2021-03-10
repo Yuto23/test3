@@ -1,8 +1,13 @@
-var mysql =require("mysql");
+const express = require('express');
+const mysql = require('mysql');
+const app = express();
+// データベース接続情報
 var conn = mysql.createConnection({
     host:"localhost",
+    port:3306,
     user:"root",
-    password:null
+    password:null,
+    database:'PaxEvan'
 });
 conn.query("create database PaxEvan;",(err)=>{
     console.log("1:",err);
@@ -17,3 +22,15 @@ conn.query("create database PaxEvan;",(err)=>{
         })
     })
 });
+
+// テーブルdtのデータを取得してindex.ejsで表示
+app.get('/', (req, res) => {
+  connection.query(
+    'SELECT * FROM dt',
+    (error, results) => {
+      res.render('index.ejs',{dt:results});
+    }
+  );
+});
+
+app.listen(3000);
