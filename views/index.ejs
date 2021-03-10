@@ -5,15 +5,23 @@
     <title>SAMPLE</title>
   </head>
   <body>
-      <ul>
-        <% dt.forEach((item) => { %>
-          <li>
-            <div>
-              <span><%= item.id %></span>
-              <span><%= item.name %></span>
-            </div>
-          </li>
+    <main>
+        <label>Name:</label>
+        <input type="text" id="name-input">
+        <button>Add Name</button>
+    </main>
+    <script src="https://unpkg.com/canvas-datagrid"></script>
+    <div id="test" />
+    <script>
+        // create a new grid
+        var grid = canvasDatagrid({
+        parentNode: document.getElementById('test')
+        });
+    grid.data = [
+    <% dt.forEach((item) => { %>
+         {id:<%= item.id %>, name:'<%= item.name %>'},
         <% }) %>
-      </ul>
+        ];
+    </script>
   </body>
 </html>
