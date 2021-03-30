@@ -1,56 +1,47 @@
+//変数を定義をする
 const express = require('express');
 const mysql = require('mysql');
 const app = express();
-const path = require('path')
+const path = require('path');
+//const canvasDatagrid = require('canvas-datagrid')
 
-// const canvasDatagrid = require('canvas-datagrid')
+//クライアントにアクセスさせたい静的ファイルが格納されているフォルダを設定する
+app.use(express.static("public"));
+
+/**入力フォームから送られてくるデータを取得する
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+**/
+
+//using res.sendFile() to deliver an HTML page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"))
+});
+
 // データベース接続情報
 const connection = mysql.createConnection({
-    host:"localhost",
-    port:3306,
-    user:"root",
-    password:null,
-    database:'PaxEvan'
+  host:"localhost",
+  port:3306,
+  user:"root",
+  password:null,
+  database:'PaxEvan'
 });
-//conn.query("create database PaxEvan;",(err)=>{
-    //console.log("1:",err);
-    //conn.query("create table PaxEvan.dt(id int,name varchar(12));",(err)=>{
-        //console.log("2:",err);
-        //conn.query("insert PaxEvan.dt value(1,'aaaa');",(err)=>{
-            //console.log("3:",err);
-            //conn.query("select * from PaxEvan.dt;",(err,re)=>{
-                //console.log("4:",err);
-                //conn.end()
-            //})
-        //})
-    //})
-//});
-
-// テーブルdtのデータを取得してindex.ejsで表示
-//app.get('/', (req, res) => {
-  //connection.query(
-   // 'SELECT * FROM dt',
-//     (error, results) => {
-//       res.render('index.ejs',{dt:results});
-//     }
-//   );
-// });
-
-//index.htmlに変えた
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"))
+connection.connect(function(err) {
+	if (err) throw err;
+	console.log('Database Connected');
 });
 
-  
+app.get('/data.json', (request, response) => {
+//mysqlのデータを引っ張る
+  const sql = "select * from dt"
+	connection.query(sql, function (err, result, fields) {  
+	if (err) throw err;
+	response.send(result)
+	});
+});
 
-  //app.get('/data', (req, res) => {
-    //connection.query(
-      //  'SELECT * FROM dt',
-        //(error, results) => {
-          //res.json(results);
-        //}
-//    );    
-  //});
-
+app.get('/scripts/mustache.js', (request, response) => {
+  response.sendFile(path.join(__dirname, 'node_modules/mustache/mustache.min.js'));
+});
 
 app.listen(3000);

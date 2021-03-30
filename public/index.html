@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EVANGELISTA</title>
+    <script type="text/javascript" src="scripts/mustache.js"></script>
+    <script id="table-template" type="text/html">
+      <table border="1">
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+        </tr>
+        {{#data}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{name}}</td>
+        </tr>
+        {{/data}}
+      </table>
+    </script>
+  </head>
+  <body>
+    
+  <input type="button"value="JSONゲット" onclick="getJSON((data) => alert(JSON.stringify(data)))">
+  <div id="table-container"></div>
+   
+  <main>
+  </main>
+    <!--script src="https://unpkg.com/canvas-datagrid"></script-->
+  <script>
+    //jsonボタンの機能作り
+   function getJSON(handler) {
+    var req = new XMLHttpRequest();		  // XMLHttpRequest オブジェクトを生成する
+        req.onreadystatechange = function() {		  // XMLHttpRequest オブジェクトの状態が変化した際に呼び出されるイベントハンドラ
+          if(req.readyState == 4 && req.status == 200){ // サーバーからのレスポンスが完了し、かつ、通信が正常に終了した場合
+            handler(JSON.parse(req.responseText));		          // 取得した JSON ファイルの中身を文字からOBJに変換してハンドラに渡す
+          }
+        };
+        req.open("GET", "data.json"); // HTTPメソッドとアクセスするサーバーの　URL　を指定
+        req.send(null);					    // 実際にサーバーへリクエストを送信
+        }  
+  </script>
+  <script language="javascript" type="text/javascript"> 
+      getJSON((data) => {
+        console.log(data);
+        var target = document.getElementById("table-container");
+        var template = document.getElementById("table-template").innerHTML;
+        target.innerHTML = Mustache.render(template, {data:data}); //htmlを生成する
+      });
+  </script>
+  </body>
+</html>
